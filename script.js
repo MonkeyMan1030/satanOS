@@ -1,472 +1,314 @@
-/* =========================================
-   CONFIGURATION & DATA
-   ========================================= */
+// === GAME CONFIGURATION ===
+const SHIFT_START = 9; 
+const SHIFT_END = 17;
+const TOTAL_DAYS = 7;
+const SECONDS_PER_HOUR = 20; // Fast gameplay: 20 real seconds = 1 game hour
 
-// Game Time Settings
-// 1 Real Second = 1 Game Minute.
-// A 9-5 shift (8 hours) = 480 game minutes = 480 real seconds (8 minutes).
-// To make it faster for testing, we can change the interval speed.
-const GAME_TICK_SPEED = 1000; // 1000ms (1s) per game minute.
-const SHIFT_START = 9; // 9:00 AM
-const SHIFT_END = 17;  // 5:00 PM (17:00)
+// === DATABASE ===
+const sins = ["Gluttony", "Greed", "Pride", "Sloth", "Wrath", "Envy", "Lust"];
+const tortures = [
+    "Force-feed Spiders", "Molten Gold Enema", "Mirror of Screams",
+    "Eternal Treadmill", "Tickle Torture", "Green Slime Bath", "Cactus Hugs"
+];
 
-// Data for Procedural Generation
-const firstNames = ["Chad", "Karen", "Elon", "Gertrude", "Kyle", "Bartholomew", "Susan", "Jeff", "Adolf", "Tiffany"];
-const lastNames = ["Musk", "Smith", "Bezos", "Doe", "Vanderbilt", "Trump", "Buffett", "Kardashian", "Zuckerberg"];
-
-// The Detective Database
-// Each sin has Clues (Deaths, Feats, Family) and a Correct Punishment.
-const sinDatabase = {
-    "Gluttony": {
-        punishment: "Spiders", // Must match value in HTML Radio button
-        deaths: [
-            "Choked on a gold-leaf steak.",
-            "Stomach ruptured at a buffet.",
-            "Drowned in a vat of chocolate."
-        ],
-        feats: [
-            "Ate 50 hotdogs in 2 minutes.",
-            "Banished from 10 'All You Can Eat' restaurants.",
-            "Spent family savings on truffles."
-        ],
-        family: [
-            "He loved food more than his children.",
-            "We had to buy a double-wide coffin.",
-            "He ate my birthday cake... every year."
-        ]
-    },
-    "Greed": {
-        punishment: "Gold",
-        deaths: [
-            "Crushed by a falling safe.",
-            "Suffocated inside a bank vault.",
-            "Heart attack while counting pennies."
-        ],
-        feats: [
-            "Evaded $50 million in taxes.",
-            "Foreclosed on an orphanage.",
-            "Sold sand to people in the desert."
-        ],
-        family: [
-            "He charged us rent to visit him.",
-            "He died clutching his wallet.",
-            "Is it true we get his money now?"
-        ]
-    },
-    "Pride": {
-        punishment: "Mirrors",
-        deaths: [
-            "Fell off a stage accepting an award.",
-            "Walked into traffic staring at reflection.",
-            "Plastic surgery gone wrong."
-        ],
-        feats: [
-            "Wrote a memoir at age 12.",
-            "Commissioned 50 statues of himself.",
-            "Declared himself a sovereign nation."
-        ],
-        family: [
-            "He never remembered our names.",
-            "He thought he was God's gift.",
-            "The mirror was his best friend."
-        ]
-    },
-    "Sloth": {
-        punishment: "Treadmill",
-        deaths: [
-            "Forgot to breathe.",
-            "Bed sores infection.",
-            "Starved because the fridge was too far."
-        ],
-        feats: [
-            "Slept for 18 hours a day.",
-            "Watched 20 years of TV.",
-            "Never held a job for more than a day."
-        ],
-        family: [
-            "He asked me to chew his food for him.",
-            "He hasn't moved since 1999.",
-            "Lazy doesn't even cover it."
-        ]
-    },
-    "Wrath": {
-        punishment: "Tickle",
-        deaths: [
-            "Head exploded from screaming.",
-            "Shot while road raging.",
-            "Stroke caused by a video game."
-        ],
-        feats: [
-            "Punched a hole in every wall he owned.",
-            "Started 50 bar fights.",
-            "Screamed at 1,000 managers."
-        ],
-        family: [
-            "We walked on eggshells around him.",
-            "He kicked the dog... and the car.",
-            "Always angry. Always shouting."
-        ]
-    },
-    "Envy": {
-        punishment: "Slime",
-        deaths: [
-            "Poisoned by own jealousy.",
-            "Crashed trying to steal neighbor's car.",
-            "Stalking accident."
-        ],
-        feats: [
-            "Sabotaged 10 coworkers.",
-            "Copied everything his brother did.",
-            "Hated everyone successful."
-        ],
-        family: [
-            "He couldn't stand seeing us happy.",
-            "If I got a toy, he broke it.",
-            "He wanted everyone's life but his own."
-        ]
-    },
-    "Lust": {
-        punishment: "Cactus",
-        deaths: [
-            "Heart attack in a brothel.",
-            "Chased a lover off a cliff.",
-            "Auto-erotic asphyxiation."
-        ],
-        feats: [
-            "Slept with 1,000 people.",
-            "Ruined 5 marriages.",
-            "Spent fortune on 'entertainment'."
-        ],
-        family: [
-            "He was never faithful.",
-            "We don't talk about his 'hobbies'.",
-            "A total pervert."
-        ]
-    }
+const sinData = {
+    "Gluttony": { clue: "Deaths involving food, stomach explosions, or eating contests.", punish: "Force-feed Spiders" },
+    "Greed": { clue: "Deaths involving money, gold, safes, or tax evasion.", punish: "Molten Gold Enema" },
+    "Pride": { clue: "Deaths involving selfies, statues, mirrors, or plastic surgery.", punish: "Mirror of Screams" },
+    "Sloth": { clue: "Deaths involving sleeping, inactivity, or starvation due to laziness.", punish: "Eternal Treadmill" },
+    "Wrath": { clue: "Deaths involving screaming, fighting, road rage, or explosions.", punish: "Tickle Torture" },
+    "Envy": { clue: "Deaths involving stalking, stealing, or copying others.", punish: "Green Slime Bath" },
+    "Lust": { clue: "Deaths involving brothels, affairs, or dangerous liaisons.", punish: "Cactus Hugs" }
 };
 
-/* =========================================
-   GAME STATE VARIABLES
-   ========================================= */
-let currentDay = 1;
-let currentHour = SHIFT_START;
-let currentMinute = 0;
-let gameTimer = null;
-let activeSouls = []; // Array of Sinner Objects
-let currentViewingID = null; // ID of soul currently open in Viewer
+// Procedural Names
+const fNames = ["Chad", "Karen", "Elon", "Jeff", "Karen", "Bartholomew", "Susan", "Kyle"];
+const lNames = ["Musk", "Bezos", "Smith", "Doe", "Trump", "Zuckerberg"];
 
-// Score Stats
-let correctCount = 0;
-let wrongCount = 0;
-let doomLevel = 0;
+// Gallery Data
+const galleryImages = [
+    { src: "", caption: "Sinner 4022: Attempted to bribe St. Peter." },
+    { src: "", caption: "Sinner 8811: Complained about the heat." },
+    { src: "", caption: "The Boss (Do not stare directly)." }
+];
 
-/* =========================================
-   INITIALIZATION
-   ========================================= */
-window.onload = function() {
-    makeDraggable(); // Enable window dragging
-    startDay();      // Begin the game loop
+// === STATE VARIABLES ===
+let state = {
+    day: 1, hour: SHIFT_START, minute: 0,
+    souls: [],
+    doom: 0,
+    score: 0,
+    timer: null
 };
 
-/* =========================================
-   TIME & LOOP SYSTEM
-   ========================================= */
+// === INITIALIZATION ===
+window.onload = () => {
+    makeDraggable();
+    populateBible();
+    populateTortureSelect();
+    startDay();
+};
+
+// === GAME LOOP ===
 function startDay() {
-    // Reset daily variables
-    currentHour = SHIFT_START;
-    currentMinute = 0;
-    correctCount = 0;
-    wrongCount = 0;
-    activeSouls = [];
+    state.hour = SHIFT_START;
+    state.souls = [];
+    state.doom = 0;
+    updateUI();
     
-    // Clear UI
-    document.getElementById('email-tbody').innerHTML = '';
-    document.getElementById('eod-screen').classList.add('hidden');
-    document.getElementById('day-display').innerText = currentDay;
-    updateDoomUI();
-
-    // Start the Clock Interval
-    if (gameTimer) clearInterval(gameTimer);
-    gameTimer = setInterval(tickGameTime, GAME_TICK_SPEED);
+    // Clear old emails
+    document.getElementById('email-list-body').innerHTML = '';
     
-    // Start Soul Spawning Loop
-    scheduleNextSoul();
+    // Start Clock
+    clearInterval(state.timer);
+    state.timer = setInterval(tick, (SECONDS_PER_HOUR * 1000) / 60);
+    
+    // Schedule first soul
+    setTimeout(spawnSoul, 2000);
 }
 
-function tickGameTime() {
-    // Increment Time
-    currentMinute++;
-    if (currentMinute >= 60) {
-        currentMinute = 0;
-        currentHour++;
+function tick() {
+    state.minute += 5;
+    if (state.minute >= 60) {
+        state.minute = 0;
+        state.hour++;
     }
-
-    // Update Clock Display
-    const timeStr = formatTime(currentHour, currentMinute);
-    document.getElementById('clock').innerText = timeStr;
-
-    // Check for End of Shift
-    if (currentHour >= SHIFT_END) {
-        endDay();
-    }
-}
-
-function formatTime(h, m) {
-    const period = h >= 12 ? "PM" : "AM";
-    const hour = h > 12 ? h - 12 : h;
-    const min = m < 10 ? "0" + m : m;
-    return `${hour}:${min} ${period}`;
-}
-
-function endDay() {
-    clearInterval(gameTimer);
     
-    // Show End of Day Screen
-    const screen = document.getElementById('eod-screen');
-    screen.classList.remove('hidden');
-    document.getElementById('eod-title').innerText = `Day ${currentDay} Report`;
-    document.getElementById('eod-correct').innerText = correctCount;
-    document.getElementById('eod-wrong').innerText = wrongCount;
-    document.getElementById('eod-doom').innerText = doomLevel;
-}
+    // Update Clock
+    const period = state.hour >= 12 ? "PM" : "AM";
+    const h = state.hour > 12 ? state.hour - 12 : state.hour;
+    const m = state.minute.toString().padStart(2, '0');
+    document.getElementById('clock').innerText = `${h}:${m} ${period}`;
 
-function startNextDay() {
-    currentDay++;
-    if (currentDay > 7) {
-        alert("WEEK COMPLETE! You are now Manager of Hell. (You win!)");
-        location.reload();
-    } else {
-        startDay();
+    // Random events
+    if (Math.random() < 0.1 && state.souls.length < 10) spawnSoul();
+
+    // End Day
+    if (state.hour >= SHIFT_END) {
+        clearInterval(state.timer);
+        alert(`SHIFT OVER.\nSouls Processed: ${state.score}\nDoom Level: ${state.doom}%`);
+        state.day++;
+        if(state.day > 7) location.reload();
+        else startDay();
     }
 }
 
-/* =========================================
-   PROCEDURAL GENERATION (The "Sinner Factory")
-   ========================================= */
-function scheduleNextSoul() {
-    // Random delay between 10 and 30 game minutes
-    const delay = Math.floor(Math.random() * 20000) + 10000;
-    
-    setTimeout(() => {
-        if (currentHour < SHIFT_END) {
-            spawnSoul();
-            scheduleNextSoul(); // Recursively schedule the next one
-        }
-    }, delay);
-}
-
+// === SOUL GENERATION ===
 function spawnSoul() {
-    if (activeSouls.length >= 10) return; // Mailbox full
-
-    // 1. Pick a Random Sin (The hidden truth)
-    const sinKeys = Object.keys(sinDatabase);
-    const trueSin = sinKeys[Math.floor(Math.random() * sinKeys.length)];
-    const sinData = sinDatabase[trueSin];
-
-    // 2. Generate Random Details based on that Sin
+    const sinKey = sins[Math.floor(Math.random() * sins.length)];
+    const id = Math.floor(Math.random() * 90000) + 10000;
+    
     const soul = {
-        id: Math.floor(Math.random() * 90000) + 10000,
-        firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
-        lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
-        trueSin: trueSin, // Hidden from player
-        death: sinData.deaths[Math.floor(Math.random() * sinData.deaths.length)],
-        feat: sinData.feats[Math.floor(Math.random() * sinData.feats.length)],
-        family: sinData.family[Math.floor(Math.random() * sinData.family.length)],
-        time: formatTime(currentHour, currentMinute)
+        id: id,
+        name: `${fNames[Math.floor(Math.random() * fNames.length)]} ${lNames[Math.floor(Math.random() * lNames.length)]}`,
+        sin: sinKey,
+        // Generate clues based on sin
+        death: "Details: " + sinData[sinKey].clue,
+        feat: "Accomplishment: Ruined everything.",
+        family: "Family says: 'Good riddance.'"
     };
 
-    activeSouls.push(soul);
-    renderMailbox();
+    state.souls.push(soul);
     
-    // Notification
-    const notif = document.getElementById('mail-notification');
-    notif.classList.remove('hidden');
-    notif.innerText = activeSouls.length;
+    // Add to Email
+    const tbody = document.getElementById('email-list-body');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>💀 Gate</td><td>New Sinner: ${soul.name}</td>`;
+    tr.onclick = () => openEmail(soul);
+    tbody.appendChild(tr);
+
+    // Update Badge
+    document.getElementById('mail-badge').classList.remove('hidden');
+    document.getElementById('inbox-count').innerText = `(${state.souls.length})`;
 }
 
-/* =========================================
-   UI LOGIC: EMAIL & SOUL VIEWER
-   ========================================= */
-function renderMailbox() {
-    const tbody = document.getElementById('email-tbody');
-    tbody.innerHTML = '';
-
-    activeSouls.forEach((soul, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>📧</td>
-            <td>St. Peter</td>
-            <td>New Arrival: ${soul.lastName}</td>
-            <td>${soul.time}</td>
-        `;
-        // On Click: Show Preview
-        tr.onclick = () => {
-            const preview = document.getElementById('email-preview');
-            preview.innerHTML = `
-                <p><strong>FROM:</strong> St. Peter (Gate)</p>
-                <p><strong>SUBJ:</strong> Judgment Required: ${soul.firstName} ${soul.lastName}</p>
-                <hr>
-                <p>Another one just dropped. Attached is their file.</p>
-                <p>Review the evidence. Determine the Sin. Punish accordingly.</p>
-                <br>
-                <button class="win-btn" onclick="openSoulFile(${index})">📂 OPEN SOUL RECORD</button>
-            `;
-        };
-        tbody.appendChild(tr);
-    });
-}
-
-function openSoulFile(index) {
-    const soul = activeSouls[index];
-    currentViewingID = soul.id;
-
-    // Populate the File Window
-    document.getElementById('file-id').innerText = soul.id;
-    document.getElementById('file-name').innerText = soul.firstName + " " + soul.lastName;
-    document.getElementById('file-death').innerText = soul.death;
-    document.getElementById('file-feat').innerText = soul.feat;
-    document.getElementById('file-family').innerText = `"${soul.family}"`;
-
-    // Show the Window
-    openWindow('file-window');
-}
-
-/* =========================================
-   GAMEPLAY LOGIC: PUNISHMENT & BIBLE
-   ========================================= */
-function showTorture(sinName) {
-    const content = document.getElementById('bible-content');
-    const method = sinDatabase[sinName].punishment;
-    content.innerHTML = `
-        <h3>SIN: ${sinName.toUpperCase()}</h3>
-        <hr>
-        <p><strong>Mandatory Punishment:</strong></p>
-        <h2 style="color: blue">${method}</h2>
-        <p><em>Failure to apply correct punishment will result in Doom.</em></p>
+// === APP LOGIC: EMAIL ===
+function openEmail(soul) {
+    const preview = document.getElementById('email-preview');
+    preview.innerHTML = `
+        <p><strong>SUBJECT:</strong> Judgment Request</p>
+        <p><strong>SOUL ID:</strong> ${soul.id}</p>
+        <p>Please review attached file and punish immediately.</p>
+        <br>
+        <button class="win-btn" onclick="openFile(${soul.id})">📂 OPEN SOUL_RECORD.TXT</button>
     `;
 }
 
-function openPunishWithID() {
-    openWindow('punish-window');
-    populatePunishDropdown();
-    // Auto-select the soul we were just looking at
-    const select = document.getElementById('soul-select');
-    for (let i=0; i<select.options.length; i++) {
-        if (select.options[i].text.includes(currentViewingID)) {
-            select.selectedIndex = i;
-            break;
-        }
-    }
-    // Close the file window to clean up
-    closeWindow('file-window');
+// === APP LOGIC: FILE VIEWER ===
+function openFile(id) {
+    const soul = state.souls.find(s => s.id === id);
+    if (!soul) return;
+    
+    document.getElementById('file-id').innerText = soul.id;
+    document.getElementById('file-name').innerText = soul.name;
+    document.getElementById('file-death').innerText = soul.death;
+    document.getElementById('file-feat').innerText = soul.feat;
+    document.getElementById('file-family').innerText = soul.family;
+    
+    openWindow('file-window');
 }
 
-function populatePunishDropdown() {
+// === APP LOGIC: PUNISH ===
+function openPunishWithID() {
+    openWindow('punish-window');
+    closeWindow('file-window');
+    populatePunishSelect();
+}
+
+function populatePunishSelect() {
     const select = document.getElementById('soul-select');
     select.innerHTML = '';
-    activeSouls.forEach((soul, index) => {
+    state.souls.forEach(s => {
         const opt = document.createElement('option');
-        opt.value = index;
-        opt.innerText = `${soul.firstName} ${soul.lastName} (ID: ${soul.id})`;
+        opt.value = s.id;
+        opt.innerText = `${s.name} (${s.id})`;
         select.appendChild(opt);
     });
 }
 
 function submitPunishment() {
-    const soulIndex = document.getElementById('soul-select').value;
-    const radio = document.querySelector('input[name="torture"]:checked');
-    const log = document.getElementById('punish-log');
-
-    if (soulIndex === "" || !radio) {
-        log.innerText = "ERROR: Missing Selection";
-        log.style.color = "red";
-        return;
-    }
-
-    const soul = activeSouls[soulIndex];
-    const selectedMethod = radio.value;
-    const correctMethod = sinDatabase[soul.trueSin].punishment;
-
-    // JUDGMENT MOMENT
-    if (selectedMethod === correctMethod) {
-        log.innerText = "SUCCESS. SOUL PROCESSED.";
-        log.style.color = "green";
-        correctCount++;
-        doomLevel = Math.max(0, doomLevel - 5);
-        activeSouls.splice(soulIndex, 1); // Remove from game
-    } else {
-        log.innerText = `ERROR! SIN WAS ${soul.trueSin.toUpperCase()}.`;
-        log.style.color = "red";
-        wrongCount++;
-        doomLevel += 15;
-    }
-
-    // Refresh UI
-    updateDoomUI();
-    renderMailbox();
-    populatePunishDropdown();
+    const select = document.getElementById('soul-select');
+    const soulId = parseInt(select.value);
+    const soul = state.souls.find(s => s.id === soulId);
     
-    // Hide notification if empty
-    if (activeSouls.length === 0) {
-        document.getElementById('mail-notification').classList.add('hidden');
+    // Get radio selection
+    const radios = document.getElementsByName('punish-method');
+    let selectedPunish = null;
+    for (let r of radios) if (r.checked) selectedPunish = r.value;
+
+    if (!soul || !selectedPunish) return;
+
+    // Judge
+    if (selectedPunish === sinData[soul.sin].punish) {
+        document.getElementById('punish-log').innerText = "SUCCESS: SOUL DAMNED.";
+        document.getElementById('punish-log').style.color = "green";
+        state.score++;
+        state.doom = Math.max(0, state.doom - 5);
+        // Remove soul
+        state.souls = state.souls.filter(s => s.id !== soulId);
+        select.remove(select.selectedIndex);
+        // Remove email row (simplified)
+        document.getElementById('email-list-body').innerHTML = ''; // lazy redraw
+    } else {
+        document.getElementById('punish-log').innerText = "ERROR: WRONG PUNISHMENT!";
+        document.getElementById('punish-log').style.color = "red";
+        state.doom += 15;
+    }
+    updateUI();
+}
+
+// === APP LOGIC: CALCULATOR (CURSED) ===
+function calcPress(val) {
+    const display = document.getElementById('calc-display');
+    if (display.value === "0") display.value = "";
+    display.value += "6"; // ALWAYS ADDS 6
+}
+function calcSolve() {
+    document.getElementById('calc-display').value = "666"; // ALWAYS 666
+}
+function calcClear() {
+    document.getElementById('calc-display').value = "0";
+}
+
+// === APP LOGIC: GALLERY ===
+let currentImgIdx = 0;
+function nextImage() {
+    currentImgIdx = (currentImgIdx + 1) % galleryImages.length;
+    updateGallery();
+}
+function prevImage() {
+    currentImgIdx = (currentImgIdx - 1 + galleryImages.length) % galleryImages.length;
+    updateGallery();
+}
+function updateGallery() {
+    document.getElementById('gallery-caption').innerText = galleryImages[currentImgIdx].caption;
+    document.getElementById('img-counter').innerText = `${currentImgIdx+1}/${galleryImages.length}`;
+    // Since we don't have real images, we change the placeholder color
+    const colors = ["red", "blue", "green"];
+    document.getElementById('gallery-display').style.color = colors[currentImgIdx];
+}
+
+// === SYSTEM & UI UTILS ===
+function updateUI() {
+    document.getElementById('day-display').innerText = state.day;
+    document.getElementById('score-display').innerText = state.score;
+    document.getElementById('doom-bar').style.width = Math.min(state.doom, 100) + "%";
+    
+    if (state.doom >= 100) {
+        document.getElementById('bsod').classList.remove('hidden');
+        clearInterval(state.timer);
     }
 }
 
-function updateDoomUI() {
-    document.getElementById('score-display').innerText = correctCount;
-    document.getElementById('doom-display').innerText = doomLevel + "%";
-    document.getElementById('doom-bar').style.width = doomLevel + "%";
-
-    if (doomLevel >= 100) {
-        clearInterval(gameTimer);
-        alert("GAME OVER. DOOM REACHED 100%. YOU ARE FIRED.");
-        location.reload();
-    }
+function populateBible() {
+    const list = document.getElementById('bible-list');
+    sins.forEach(sin => {
+        const li = document.createElement('li');
+        li.innerText = sin;
+        li.onclick = () => {
+            document.getElementById('bible-content').innerHTML = `
+                <h3>${sin}</h3>
+                <p><strong>Symptoms:</strong> ${sinData[sin].clue}</p>
+                <p><strong>Punishment:</strong> ${sinData[sin].punish}</p>
+            `;
+        };
+        list.appendChild(li);
+    });
 }
 
-/* =========================================
-   WINDOW MANAGEMENT (Drag & Drop)
-   ========================================= */
+function populateTortureSelect() {
+    const container = document.getElementById('torture-options');
+    tortures.forEach(t => {
+        const div = document.createElement('div');
+        div.innerHTML = `<input type="radio" name="punish-method" value="${t}"> ${t}`;
+        container.appendChild(div);
+    });
+}
+
+// === WINDOW MANAGER ===
 function openWindow(id) {
     const win = document.getElementById(id);
     win.classList.remove('hidden');
-    bringToFront(win);
+    
+    // Simple z-index handling
+    document.querySelectorAll('.window').forEach(w => {
+        w.style.zIndex = 10;
+        w.querySelector('.title-bar').classList.add('inactive');
+    });
+    win.style.zIndex = 100;
+    win.querySelector('.title-bar').classList.remove('inactive');
 }
 
 function closeWindow(id) {
     document.getElementById(id).classList.add('hidden');
 }
 
-function bringToFront(win) {
-    // Reset all z-indexes
-    document.querySelectorAll('.window').forEach(w => w.style.zIndex = 10);
-    win.style.zIndex = 100;
+function toggleStartMenu() {
+    const menu = document.getElementById('start-menu');
+    menu.classList.toggle('hidden');
 }
 
 function makeDraggable() {
-    const windows = document.querySelectorAll('.window');
-    windows.forEach(win => {
+    document.querySelectorAll('.window').forEach(win => {
         const titleBar = win.querySelector('.title-bar');
         
-        // Click to bring to front
-        win.addEventListener('mousedown', () => bringToFront(win));
+        win.addEventListener('mousedown', () => openWindow(win.id));
 
-        // Drag Logic
         titleBar.addEventListener('mousedown', (e) => {
             let shiftX = e.clientX - win.getBoundingClientRect().left;
             let shiftY = e.clientY - win.getBoundingClientRect().top;
-
+            
             function moveAt(pageX, pageY) {
                 win.style.left = pageX - shiftX + 'px';
                 win.style.top = pageY - shiftY + 'px';
             }
-
             function onMouseMove(event) { moveAt(event.pageX, event.pageY); }
-
+            
             document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', () => {
+            document.onmouseup = () => {
                 document.removeEventListener('mousemove', onMouseMove);
-            }, {once: true});
+                document.onmouseup = null;
+            };
         });
     });
 }
