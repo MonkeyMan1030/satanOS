@@ -3,163 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SatanOS 98 - Purgatory Edition</title>
+    <title>SatanOS 98 - Professional Edition</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="desktop">
         
-        <div class="desktop-icon" onclick="openWindow('email-window')">
+        <div class="desktop-icon" ondblclick="openWindow('computer-window')">
+            <div class="icon-img">💻</div>
+            <div class="icon-text">My Hell</div>
+        </div>
+
+        <div class="desktop-icon" ondblclick="openWindow('email-window')">
             <div class="icon-img">📧</div>
-            <div class="icon-text">SinMail 6.0</div>
-            <div id="mail-notification" class="notification hidden">!</div>
+            <div class="icon-text">SinMail</div>
+            <div id="mail-badge" class="badge hidden">!</div>
         </div>
 
-        <div class="desktop-icon" onclick="openWindow('bible-window')">
+        <div class="desktop-icon" ondblclick="openWindow('bible-window')">
             <div class="icon-img">📖</div>
-            <div class="icon-text">Unholy Bible</div>
+            <div class="icon-text">Torture.chm</div>
         </div>
 
-        <div class="desktop-icon" onclick="openWindow('punish-window')">
-            <div class="icon-img">💀</div>
+        <div class="desktop-icon" ondblclick="openWindow('punish-window')">
+            <div class="icon-img">⚖️</div>
             <div class="icon-text">Punish.exe</div>
         </div>
 
-        <div id="status-widget">
-            <p><strong>SHIFT PROGRESS</strong></p>
-            <hr>
-            <p>Day: <span id="day-display">1</span> / 7</p>
-            <p>Quota: <span id="score-display">0</span> Souls</p>
-            <p>Doom: <span id="doom-display">0%</span></p>
-            <div class="progress-bar"><div id="doom-bar" style="width: 0%;"></div></div>
+        <div class="desktop-icon" ondblclick="openWindow('gallery-window')">
+            <div class="icon-img">🖼️</div>
+            <div class="icon-text">SinPics</div>
         </div>
 
-        <div id="email-window" class="window hidden" style="top: 5%; left: 5%; width: 480px; height: 400px;">
-            <div class="title-bar">
-                <div class="title-bar-text">Inbox - SinMail Express</div>
-                <div class="title-bar-controls">
-                    <button onclick="closeWindow('email-window')">X</button>
-                </div>
+        <div class="desktop-icon" ondblclick="openWindow('calc-window')">
+            <div class="icon-img">🧮</div>
+            <div class="icon-text">Calc666</div>
+        </div>
+
+        <div class="window" style="position: absolute; top: 20px; right: 20px; width: 200px; z-index: 1;">
+            <div class="title-bar inactive">
+                <div class="title-bar-text">Shift Status</div>
             </div>
             <div class="window-body">
-                <div class="toolbar">
-                    <button>New Mail</button> <button>Reply</button> <button>Delete</button>
-                </div>
-                <div class="inset-field" style="height: 150px; overflow-y: scroll; background: white;">
-                    <table class="email-table">
-                        <thead>
-                            <tr>
-                                <th width="20">!</th>
-                                <th>From</th>
-                                <th>Subject</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="email-tbody">
-                            </tbody>
-                    </table>
-                </div>
-                <div class="inset-field" id="email-preview" style="flex-grow: 1; margin-top: 5px; background: white; padding: 10px;">
-                    <p style="color: gray;">Select a message to view content.</p>
+                <p>Day: <span id="day-display">1</span> / 7</p>
+                <p>Quota: <span id="score-display">0</span> Souls</p>
+                <div class="progress-bar-container">
+                    <div class="progress-text">DOOM LEVEL</div>
+                    <div class="progress-bar"><div id="doom-bar" style="width: 0%;"></div></div>
                 </div>
             </div>
-        </div>
-
-        <div id="file-window" class="window hidden" style="top: 10%; left: 20%; width: 400px; z-index: 101;">
-            <div class="title-bar">
-                <div class="title-bar-text">Soul_Record_Viewer.exe</div>
-                <div class="title-bar-controls"><button onclick="closeWindow('file-window')">X</button></div>
-            </div>
-            <div class="window-body" style="background: #e0e0e0;">
-                <div class="paper-record">
-                    <h2>CONFIDENTIAL RECORD</h2>
-                    <p><strong>ID:</strong> <span id="file-id">Unknown</span></p>
-                    <p><strong>Name:</strong> <span id="file-name">Unknown</span></p>
-                    <hr>
-                    <p><strong>CAUSE OF DEATH:</strong></p>
-                    <p id="file-death" class="handwritten">Loading...</p>
-                    
-                    <p><strong>KEY ACCOMPLISHMENT:</strong></p>
-                    <p id="file-feat" class="handwritten">Loading...</p>
-                    
-                    <p><strong>FAMILY TESTIMONY:</strong></p>
-                    <p id="file-family" class="handwritten">Loading...</p>
-                    <hr>
-                    <button class="win-btn" onclick="openPunishWithID()">INITIATE PUNISHMENT PROTOCOL</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="bible-window" class="window hidden" style="top: 15%; left: 50%; width: 350px;">
-            <div class="title-bar">
-                <div class="title-bar-text">Torture Guidelines v6.6.6</div>
-                <div class="title-bar-controls"><button onclick="closeWindow('bible-window')">X</button></div>
-            </div>
-            <div class="window-body display-flex">
-                <div class="sidebar inset-field">
-                    <ul>
-                        <li onclick="showTorture('Gluttony')">Gluttony</li>
-                        <li onclick="showTorture('Greed')">Greed</li>
-                        <li onclick="showTorture('Pride')">Pride</li>
-                        <li onclick="showTorture('Sloth')">Sloth</li>
-                        <li onclick="showTorture('Wrath')">Wrath</li>
-                        <li onclick="showTorture('Envy')">Envy</li>
-                        <li onclick="showTorture('Lust')">Lust</li>
-                    </ul>
-                </div>
-                <div class="content-pane inset-field" id="bible-content">
-                    <p>Select a Sin to view the mandatory punishment.</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="punish-window" class="window hidden" style="top: 30%; left: 30%; width: 320px;">
-            <div class="title-bar">
-                <div class="title-bar-text">Punishment Manager</div>
-                <div class="title-bar-controls"><button onclick="closeWindow('punish-window')">X</button></div>
-            </div>
-            <div class="window-body">
-                <fieldset>
-                    <legend>Target</legend>
-                    <select id="soul-select" class="win-input"></select>
-                </fieldset>
-                <fieldset>
-                    <legend>Method</legend>
-                    <div class="radio-group">
-                        <label><input type="radio" name="torture" value="Spiders"> Force-feed Spiders</label>
-                        <label><input type="radio" name="torture" value="Gold"> Molten Gold Enema</label>
-                        <label><input type="radio" name="torture" value="Mirrors"> Mirror of Screams</label>
-                        <label><input type="radio" name="torture" value="Treadmill"> Eternal Treadmill</label>
-                        <label><input type="radio" name="torture" value="Tickle"> Tickle Torture</label>
-                        <label><input type="radio" name="torture" value="Slime"> Green Slime Bath</label>
-                        <label><input type="radio" name="torture" value="Cactus"> Cactus Hugs</label>
-                    </div>
-                </fieldset>
-                <button class="win-btn big-btn" onclick="submitPunishment()">EXECUTE JUDGMENT</button>
-                <div id="punish-log" class="inset-field" style="margin-top: 5px; height: 20px; color: green; font-family: monospace;">Ready...</div>
-            </div>
-        </div>
-
-        <div id="eod-screen" class="hidden">
-            <h1>SHIFT COMPLETE</h1>
-            <h2 id="eod-title">Day 1 Report</h2>
-            <div class="report-card">
-                <p>Correct Judgments: <span id="eod-correct">0</span></p>
-                <p>Wrongful Damnations: <span id="eod-wrong">0</span></p>
-                <p>Current Doom Level: <span id="eod-doom">0</span>%</p>
-            </div>
-            <button class="win-btn big-btn" onclick="startNextDay()">START NEXT SHIFT</button>
         </div>
 
     </div>
 
-    <div id="taskbar">
-        <button class="start-btn"><b>😈 Start</b></button>
-        <div class="divider"></div>
-        <div class="taskbar-right">
-            <span id="clock">9:00 AM</span>
+    <div id="computer-window" class="window hidden" style="top: 10%; left: 10%; width: 400px;">
+        <div class="title-bar">
+            <div class="title-bar-text">My Hell</div>
+            <div class="title-bar-controls"><button onclick="closeWindow('computer-window')">X</button></div>
         </div>
+        <div class="window-body bg-white flex-row">
+            <div class="sidebar-gray">
+                <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png" width="50">
+                <p><strong>System (C:)</strong></p>
+                <p>Capacity: Infinite</p>
+                <p>Free Space: 0 bytes</p>
+            </div>
+            <div class="file-grid">
+                <div class="file-item"><span>📁</span><br>Souls</div>
+                <div class="file-item"><span>📁</span><br>Lava</div>
+                <div class="file-item"><span>📄</span><br>Contract.txt</div>
+            </div>
+        </div>
+        <div class="status-bar">3 object(s)</div>
+    </div>
+
+    <div id="calc-window" class="window hidden" style="top: 15%; left: 40%; width: 250px;">
+        <div class="title-bar">
+            <div class="title-bar-text">Calculator</div>
+            <div class="title-bar-controls"><button onclick="closeWindow('calc-window')">X</button></div>
+        </div>
+        <div class="window-body">
+            <input type="text" id="calc-display" value="0" readonly class="inset-field" style="width: 95%; text-align: right; margin-bottom: 10px;">
+            <div class="calc-grid">
+                <button onclick="calcPress('7')">7</button><button onclick="calcPress('8')">8</button><button onclick="calcPress('9')">9</button><button onclick="calcPress('/')">/</button>
+                <button onclick="calcPress('4')">4</button><button onclick="calcPress('5')">5</button><button onclick="calcPress('6')">6</button><button onclick="calcPress('*')">*</button>
+                <button onclick="calcPress('1')">1</button><button onclick="calcPress('2')">2</button><button onclick="calcPress('3')">3</button><button onclick="calcPress('-')">-</button>
+                <button onclick="calcPress('0')">0</button><button onclick="calcPress('.')">.</button><button onclick="calcSolve()">=</button><button onclick="calcPress('+')">+</button>
+                <button onclick="calcClear()" style="width: 100%; grid-column: span 4; margin-top: 5px; color: red;">CLEAR SINS</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="gallery-window" class="window hidden" style="top: 20%; left: 20%; width: 500px;">
+        <div class="title-bar">
+            <div class="title-bar-text">SinPics Image Viewer</div>
+            <div class="title-bar-controls"><button onclick="closeWindow('gallery-window')">X</button></div>
+        </div>
+        <div class="window-body">
+            <div class="gallery-toolbar">
+                <button onclick="prevImage()">Previous</button>
+                <button onclick="nextImage()">Next</button>
+                <span>Image: <span id="img-counter">1/3</span></span>
+            </div>
+            <div class="inset-field" style="height: 300px; display: flex; align-items: center; justify-content: center; background: black; overflow: hidden;">
+                <div id="gallery-display" style="color: red; font-family: 'Courier New'; font-size: 20px;">[CORRUPTED SOUL DATA]</div>
+            </div>
+            <p id="gallery-caption" style="margin-top: 5px;">Subject: Unknown</p>
+        </div>
+    </div>
+
+    <div id="email-window" class="window hidden" style="top: 5%; left: 5%; width: 550px; height: 450px;">
+        <div class="title-bar">
+            <div class="title-bar-text">Inbox - SinMail Express</div>
+            <div class="title-bar-controls"><button onclick="closeWindow('email-window')">X</button></div>
+        </div>
+        <div class="window-body flex-col">
+            <div class="toolbar">
+                <button>New Mail</button><button>Reply (Auto-Deny)</button><button>Delete</button>
+            </div>
+            <div class="flex-row" style="height: 100%;">
+                <div class="sidebar-tree inset-field">
+                    <ul>
+                        <li>📥 Inbox <span id="inbox-count">(0)</span></li>
+                        <li>📤 Outbox</li>
+                        <li>🗑️ Trash</li>
+                        <li>🔥 Spam</li>
+                    </ul>
+                </div>
+                <div class="flex-col" style="flex-grow: 1; padding-left: 5px;">
+                    <div class="inset-field email-list">
+                        <table width="100%">
+                            <thead><tr style="background:#c0c0c0"><th>From</th><th>Subject</th></tr></thead>
+                            <tbody id="email-list-body"></tbody>
+                        </table>
+                    </div>
+                    <div class="inset-field email-preview" id="email-preview">
+                        <p style="color:gray; padding:10px;">Select a soul to process...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="file-window" class="window hidden" style="top: 15%; left: 30%; width: 400px; z-index: 1000;">
+        <div class="title-bar active">
+            <div class="title-bar-text">Soul_Record.txt - Notepad</div>
+            <div class="title-bar-controls"><button onclick="closeWindow('file-window')">X</button></div>
+        </div>
+        <div class="window-body bg-white" style="font-family: 'Courier New', monospace;">
+            <p><strong>ID:</strong> <span id="file-id">...</span></p>
+            <p><strong>NAME:</strong> <span id="file-name">...</span></p>
+            <hr>
+            <p>&gt; DEATH CAUSE: <br><span id="file-death" style="color:darkred">...</span></p>
+            <br>
+            <p>&gt; LIFE FEAT: <br><span id="file-feat" style="color:darkblue">...</span></p>
+            <br>
+            <p>&gt; FAMILY NOTE: <br><span id="file-family" style="font-style:italic">...</span></p>
+            <hr>
+            <button class="win-btn" onclick="openPunishWithID()" style="width: 100%">> INITIATE JUDGMENT <</button>
+        </div>
+    </div>
+
+    <div id="bible-window" class="window hidden" style="top: 25%; left: 50%; width: 300px;">
+        <div class="title-bar">
+            <div class="title-bar-text">Torture Help</div>
+            <div class="title-bar-controls"><button onclick="closeWindow('bible-window')">X</button></div>
+        </div>
+        <div class="window-body flex-row">
+            <div class="sidebar-tree inset-field" style="width: 40%">
+                <ul id="bible-list">
+                    </ul>
+            </div>
+            <div class="inset-field bg-white" id="bible-content" style="width: 60%; padding: 5px;">
+                Select Sin.
+            </div>
+        </div>
+    </div>
+
+    <div id="punish-window" class="window hidden" style="top: 40%; left: 40%; width: 350px;">
+        <div class="title-bar">
+            <div class="title-bar-text">Punish.exe</div>
+            <div class="title-bar-controls"><button onclick="closeWindow('punish-window')">X</button></div>
+        </div>
+        <div class="window-body">
+            <fieldset>
+                <legend>Target ID</legend>
+                <select id="soul-select" class="win-input" style="width:100%"></select>
+            </fieldset>
+            <fieldset>
+                <legend>Torture Method</legend>
+                <div id="torture-options"></div>
+            </fieldset>
+            <div style="text-align: right;">
+                <button class="win-btn" onclick="submitPunishment()">EXECUTE</button>
+            </div>
+            <div class="status-bar" id="punish-log">Ready...</div>
+        </div>
+    </div>
+
+    <div id="start-menu" class="window hidden">
+        <div class="start-sidebar">
+            <span class="vertical-text"><b>Satan</b>OS 98</span>
+        </div>
+        <div class="start-items">
+            <div class="start-item">📂 Programs</div>
+            <div class="start-item">📄 Documents</div>
+            <div class="start-item">⚙️ Settings</div>
+            <div class="start-item">🔎 Find Sins</div>
+            <hr>
+            <div class="start-item" onclick="alert('You cannot leave. You work here forever.')">🔑 Log Off</div>
+            <div class="start-item" onclick="alert('There is no escape.')">🛑 Shut Down</div>
+        </div>
+    </div>
+
+    <div id="taskbar">
+        <button class="start-btn" onclick="toggleStartMenu()">
+            <span style="font-size:14px">😈</span> <b>Start</b>
+        </button>
+        <div class="divider"></div>
+        <div class="taskbar-tray">
+            <span id="clock">12:00 PM</span>
+        </div>
+    </div>
+
+    <div id="bsod" class="hidden">
+        <p>A fatal exception 0E has occurred at 0028:C0011E36 in VXD VMM(01) + 00010E36.</p>
+        <p>YOU HAVE FAILED LUCIFER.</p>
+        <p>The current application will be terminated.</p>
+        <p style="margin-top: 50px; color: gray;">Press any key to accept your fate...</p>
     </div>
 
     <script src="script.js"></script>
