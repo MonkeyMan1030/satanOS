@@ -1,0 +1,145 @@
+/* --- GLOBAL RESET & FONT --- */
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #008080; /* Classic Teal */
+    font-family: 'Tahoma', sans-serif;
+    font-size: 11px;
+    user-select: none;
+    cursor: default;
+}
+
+/* --- THE WINDOWS 98 "BEVEL" EFFECT --- */
+/* Used on buttons, windows, taskbar */
+.window, .taskbar, .win-btn, #status-widget {
+    background: #c0c0c0; /* Standard Gray */
+    border-top: 2px solid #dfdfdf;
+    border-left: 2px solid #dfdfdf;
+    border-right: 2px solid #000;
+    border-bottom: 2px solid #000;
+    box-shadow: 1px 1px 0 #000;
+}
+
+/* Used on input fields, white areas (Inset effect) */
+.inset-field, .win-input, .paper-record {
+    background: #fff;
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+}
+
+/* --- DESKTOP LAYOUT --- */
+#desktop {
+    width: 100vw;
+    height: calc(100vh - 30px); /* Leave room for taskbar */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.desktop-icon {
+    width: 70px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.icon-img { font-size: 32px; text-shadow: 2px 2px #000; }
+.icon-text { margin-top: 2px; text-shadow: 1px 1px #000; padding: 2px; }
+.desktop-icon:active .icon-text { background: #000080; border: 1px dotted white; }
+
+.notification {
+    position: absolute; top: 0; right: 10px;
+    background: red; color: white;
+    width: 18px; height: 18px;
+    border-radius: 50%; font-weight: bold;
+    text-align: center; line-height: 18px;
+    border: 1px solid white;
+}
+
+/* --- WINDOW STYLING --- */
+.window {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+}
+.window.hidden { display: none; }
+
+.title-bar {
+    background: linear-gradient(90deg, #000080, #1084d0);
+    color: white;
+    padding: 2px 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.title-bar-controls button {
+    width: 16px; height: 14px;
+    font-size: 9px; font-weight: bold;
+    background: #c0c0c0;
+    border: 1px outset #fff;
+    margin-left: 2px; cursor: pointer;
+}
+.title-bar-controls button:active { border-style: inset; }
+
+.window-body { flex-grow: 1; padding: 5px; overflow: hidden; display: flex; flex-direction: column; }
+
+/* --- APP SPECIFIC STYLES --- */
+/* Mail App */
+.toolbar { margin-bottom: 5px; border-bottom: 1px solid #808080; padding-bottom: 5px; }
+.email-table { width: 100%; border-collapse: collapse; }
+.email-table th { text-align: left; background: #d4d0c8; border-bottom: 1px solid #000; }
+.email-table tr:hover { background: #000080; color: white; cursor: pointer; }
+
+/* Soul Record App */
+.paper-record { padding: 15px; height: 100%; font-family: 'Courier New', Courier, monospace; }
+.handwritten { color: #0000aa; font-weight: bold; font-family: 'Courier New'; }
+
+/* Bible App */
+.display-flex { display: flex; gap: 5px; height: 100%; }
+.sidebar { width: 30%; height: 100%; background: white; }
+.sidebar ul { list-style: none; padding: 0; margin: 0; }
+.sidebar li { padding: 2px 5px; cursor: pointer; }
+.sidebar li:hover { background: #000080; color: white; }
+.content-pane { width: 70%; height: 100%; padding: 10px; background: white; overflow-y: auto; }
+
+/* Widget */
+#status-widget {
+    position: absolute; top: 20px; right: 20px;
+    width: 150px; padding: 10px;
+}
+.progress-bar { width: 100%; height: 10px; background: white; border: 1px inset white; }
+#doom-bar { height: 100%; background: #000080; }
+
+/* --- END OF DAY SCREEN --- */
+#eod-screen {
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #000; color: #00ff00;
+    font-family: 'Courier New';
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    z-index: 9999;
+}
+.hidden { display: none !important; }
+
+/* --- TASKBAR --- */
+#taskbar {
+    position: fixed; bottom: 0; left: 0;
+    width: 100%; height: 28px;
+    z-index: 10000; display: flex; align-items: center; padding: 2px;
+}
+.start-btn { font-weight: bold; padding: 2px 6px; margin-right: 5px; border: 2px outset #fff; cursor: pointer; }
+.start-btn:active { border-style: inset; }
+.taskbar-right { margin-left: auto; border: 1px inset #fff; padding: 2px 10px; background: #c0c0c0; margin-right: 5px;}

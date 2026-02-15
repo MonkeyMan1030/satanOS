@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SatanOS 98 - Purgatory Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="desktop">
+        
+        <div class="desktop-icon" onclick="openWindow('email-window')">
+            <div class="icon-img">📧</div>
+            <div class="icon-text">SinMail 6.0</div>
+            <div id="mail-notification" class="notification hidden">!</div>
+        </div>
+
+        <div class="desktop-icon" onclick="openWindow('bible-window')">
+            <div class="icon-img">📖</div>
+            <div class="icon-text">Unholy Bible</div>
+        </div>
+
+        <div class="desktop-icon" onclick="openWindow('punish-window')">
+            <div class="icon-img">💀</div>
+            <div class="icon-text">Punish.exe</div>
+        </div>
+
+        <div id="status-widget">
+            <p><strong>SHIFT PROGRESS</strong></p>
+            <hr>
+            <p>Day: <span id="day-display">1</span> / 7</p>
+            <p>Quota: <span id="score-display">0</span> Souls</p>
+            <p>Doom: <span id="doom-display">0%</span></p>
+            <div class="progress-bar"><div id="doom-bar" style="width: 0%;"></div></div>
+        </div>
+
+        <div id="email-window" class="window hidden" style="top: 5%; left: 5%; width: 480px; height: 400px;">
+            <div class="title-bar">
+                <div class="title-bar-text">Inbox - SinMail Express</div>
+                <div class="title-bar-controls">
+                    <button onclick="closeWindow('email-window')">X</button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class="toolbar">
+                    <button>New Mail</button> <button>Reply</button> <button>Delete</button>
+                </div>
+                <div class="inset-field" style="height: 150px; overflow-y: scroll; background: white;">
+                    <table class="email-table">
+                        <thead>
+                            <tr>
+                                <th width="20">!</th>
+                                <th>From</th>
+                                <th>Subject</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="email-tbody">
+                            </tbody>
+                    </table>
+                </div>
+                <div class="inset-field" id="email-preview" style="flex-grow: 1; margin-top: 5px; background: white; padding: 10px;">
+                    <p style="color: gray;">Select a message to view content.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="file-window" class="window hidden" style="top: 10%; left: 20%; width: 400px; z-index: 101;">
+            <div class="title-bar">
+                <div class="title-bar-text">Soul_Record_Viewer.exe</div>
+                <div class="title-bar-controls"><button onclick="closeWindow('file-window')">X</button></div>
+            </div>
+            <div class="window-body" style="background: #e0e0e0;">
+                <div class="paper-record">
+                    <h2>CONFIDENTIAL RECORD</h2>
+                    <p><strong>ID:</strong> <span id="file-id">Unknown</span></p>
+                    <p><strong>Name:</strong> <span id="file-name">Unknown</span></p>
+                    <hr>
+                    <p><strong>CAUSE OF DEATH:</strong></p>
+                    <p id="file-death" class="handwritten">Loading...</p>
+                    
+                    <p><strong>KEY ACCOMPLISHMENT:</strong></p>
+                    <p id="file-feat" class="handwritten">Loading...</p>
+                    
+                    <p><strong>FAMILY TESTIMONY:</strong></p>
+                    <p id="file-family" class="handwritten">Loading...</p>
+                    <hr>
+                    <button class="win-btn" onclick="openPunishWithID()">INITIATE PUNISHMENT PROTOCOL</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="bible-window" class="window hidden" style="top: 15%; left: 50%; width: 350px;">
+            <div class="title-bar">
+                <div class="title-bar-text">Torture Guidelines v6.6.6</div>
+                <div class="title-bar-controls"><button onclick="closeWindow('bible-window')">X</button></div>
+            </div>
+            <div class="window-body display-flex">
+                <div class="sidebar inset-field">
+                    <ul>
+                        <li onclick="showTorture('Gluttony')">Gluttony</li>
+                        <li onclick="showTorture('Greed')">Greed</li>
+                        <li onclick="showTorture('Pride')">Pride</li>
+                        <li onclick="showTorture('Sloth')">Sloth</li>
+                        <li onclick="showTorture('Wrath')">Wrath</li>
+                        <li onclick="showTorture('Envy')">Envy</li>
+                        <li onclick="showTorture('Lust')">Lust</li>
+                    </ul>
+                </div>
+                <div class="content-pane inset-field" id="bible-content">
+                    <p>Select a Sin to view the mandatory punishment.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="punish-window" class="window hidden" style="top: 30%; left: 30%; width: 320px;">
+            <div class="title-bar">
+                <div class="title-bar-text">Punishment Manager</div>
+                <div class="title-bar-controls"><button onclick="closeWindow('punish-window')">X</button></div>
+            </div>
+            <div class="window-body">
+                <fieldset>
+                    <legend>Target</legend>
+                    <select id="soul-select" class="win-input"></select>
+                </fieldset>
+                <fieldset>
+                    <legend>Method</legend>
+                    <div class="radio-group">
+                        <label><input type="radio" name="torture" value="Spiders"> Force-feed Spiders</label>
+                        <label><input type="radio" name="torture" value="Gold"> Molten Gold Enema</label>
+                        <label><input type="radio" name="torture" value="Mirrors"> Mirror of Screams</label>
+                        <label><input type="radio" name="torture" value="Treadmill"> Eternal Treadmill</label>
+                        <label><input type="radio" name="torture" value="Tickle"> Tickle Torture</label>
+                        <label><input type="radio" name="torture" value="Slime"> Green Slime Bath</label>
+                        <label><input type="radio" name="torture" value="Cactus"> Cactus Hugs</label>
+                    </div>
+                </fieldset>
+                <button class="win-btn big-btn" onclick="submitPunishment()">EXECUTE JUDGMENT</button>
+                <div id="punish-log" class="inset-field" style="margin-top: 5px; height: 20px; color: green; font-family: monospace;">Ready...</div>
+            </div>
+        </div>
+
+        <div id="eod-screen" class="hidden">
+            <h1>SHIFT COMPLETE</h1>
+            <h2 id="eod-title">Day 1 Report</h2>
+            <div class="report-card">
+                <p>Correct Judgments: <span id="eod-correct">0</span></p>
+                <p>Wrongful Damnations: <span id="eod-wrong">0</span></p>
+                <p>Current Doom Level: <span id="eod-doom">0</span>%</p>
+            </div>
+            <button class="win-btn big-btn" onclick="startNextDay()">START NEXT SHIFT</button>
+        </div>
+
+    </div>
+
+    <div id="taskbar">
+        <button class="start-btn"><b>😈 Start</b></button>
+        <div class="divider"></div>
+        <div class="taskbar-right">
+            <span id="clock">9:00 AM</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+/SatanOS
+  ├── index.html
+  ├── style.css
+  ├── script.js
+  └── /assets
+       ├── /icons
+       │    ├── my-computer.png
+       │    ├── mail-icon.png
+       │    ├── bible-icon.png
+       │    ├── skull.png
+       │    └── fire.png
+       ├── /sounds
+       │    ├── startup.mp3    (Windows 95/98 startup sound)
+       │    ├── error.wav      (The classic "Chord" sound)
+       │    ├── email.wav      ("You've got mail")
+       │    └── scream.wav     (For successful punishment)
+       └── /photos
+            └── (Place sinner mugshots here later)
