@@ -1,145 +1,156 @@
-/* --- GLOBAL RESET & FONT --- */
+:root {
+    --win-gray: #c0c0c0;
+    --win-blue: #000080;
+    --win-dark: #808080;
+    --win-light: #ffffff;
+    --teal-bg: #008080;
+}
+
 body {
+    background-color: var(--teal-bg);
     margin: 0;
     overflow: hidden;
-    background-color: #008080; /* Classic Teal */
-    font-family: 'Tahoma', sans-serif;
+    font-family: 'Tahoma', sans-serif; /* Close to MS Sans Serif */
     font-size: 11px;
     user-select: none;
-    cursor: default;
 }
 
-/* --- THE WINDOWS 98 "BEVEL" EFFECT --- */
-/* Used on buttons, windows, taskbar */
-.window, .taskbar, .win-btn, #status-widget {
-    background: #c0c0c0; /* Standard Gray */
-    border-top: 2px solid #dfdfdf;
-    border-left: 2px solid #dfdfdf;
-    border-right: 2px solid #000;
-    border-bottom: 2px solid #000;
-    box-shadow: 1px 1px 0 #000;
+/* === UTILITY CLASSES === */
+.hidden { display: none !important; }
+.flex-row { display: flex; flex-direction: row; height: 100%; }
+.flex-col { display: flex; flex-direction: column; height: 100%; }
+.bg-white { background: white; }
+
+/* === 3D BORDERS (The 98 Magic) === */
+.window, .taskbar, #start-menu, .win-btn {
+    background: var(--win-gray);
+    box-shadow: inset 1px 1px #dfdfdf, 
+                inset -1px -1px #000000, 
+                1px 1px 0px #000000;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    padding: 2px;
 }
 
-/* Used on input fields, white areas (Inset effect) */
-.inset-field, .win-input, .paper-record {
-    background: #fff;
-    border-top: 2px solid #808080;
-    border-left: 2px solid #808080;
-    border-right: 2px solid #fff;
-    border-bottom: 2px solid #fff;
+.inset-field, .win-input, .email-list, .email-preview {
+    background: white;
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    box-shadow: inset 1px 1px 0px #000, 
+                inset -1px -1px 0px #dfdfdf;
 }
 
-/* --- DESKTOP LAYOUT --- */
+/* === DESKTOP === */
 #desktop {
-    width: 100vw;
-    height: calc(100vh - 30px); /* Leave room for taskbar */
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
     flex-wrap: wrap;
+    height: calc(100vh - 40px);
     align-content: flex-start;
 }
 
 .desktop-icon {
     width: 70px;
+    margin-bottom: 20px;
     text-align: center;
     color: white;
     cursor: pointer;
     position: relative;
-    margin-bottom: 15px;
+}
+.desktop-icon .icon-img { font-size: 32px; text-shadow: 2px 2px 0 #000; }
+.desktop-icon .icon-text { margin-top: 2px; text-shadow: 1px 1px 0 #000; padding: 2px; background: none; }
+.desktop-icon:active .icon-img { transform: translate(1px, 1px); }
+.desktop-icon:active .icon-text { background: var(--win-blue); border: 1px dotted white; }
+
+.badge {
+    position: absolute; top: -5px; right: 10px;
+    background: red; color: white; border-radius: 50%;
+    width: 16px; height: 16px; font-size: 10px; line-height: 16px; border: 1px solid white;
 }
 
-.icon-img { font-size: 32px; text-shadow: 2px 2px #000; }
-.icon-text { margin-top: 2px; text-shadow: 1px 1px #000; padding: 2px; }
-.desktop-icon:active .icon-text { background: #000080; border: 1px dotted white; }
-
-.notification {
-    position: absolute; top: 0; right: 10px;
-    background: red; color: white;
-    width: 18px; height: 18px;
-    border-radius: 50%; font-weight: bold;
-    text-align: center; line-height: 18px;
-    border: 1px solid white;
-}
-
-/* --- WINDOW STYLING --- */
-.window {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    padding: 3px;
-    box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
-}
-.window.hidden { display: none; }
+/* === WINDOWS === */
+.window { position: absolute; display: flex; flex-direction: column; }
+.window-body { padding: 8px; flex-grow: 1; }
 
 .title-bar {
-    background: linear-gradient(90deg, #000080, #1084d0);
-    color: white;
-    padding: 2px 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-    margin-bottom: 2px;
+    background: linear-gradient(90deg, var(--win-blue), #1084d0);
+    color: white; padding: 3px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-weight: bold; font-size: 11px;
 }
+.title-bar.inactive { background: #808080; color: #c0c0c0; }
 
 .title-bar-controls button {
-    width: 16px; height: 14px;
-    font-size: 9px; font-weight: bold;
-    background: #c0c0c0;
-    border: 1px outset #fff;
-    margin-left: 2px; cursor: pointer;
+    width: 16px; height: 14px; font-size: 9px; line-height: 10px;
+    background: var(--win-gray); border: 1px outset white; margin-left: 2px;
 }
 .title-bar-controls button:active { border-style: inset; }
 
-.window-body { flex-grow: 1; padding: 5px; overflow: hidden; display: flex; flex-direction: column; }
+/* === APP: CALCULATOR === */
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+.calc-grid button { height: 25px; cursor: pointer; }
 
-/* --- APP SPECIFIC STYLES --- */
-/* Mail App */
+/* === APP: EMAIL === */
 .toolbar { margin-bottom: 5px; border-bottom: 1px solid #808080; padding-bottom: 5px; }
-.email-table { width: 100%; border-collapse: collapse; }
-.email-table th { text-align: left; background: #d4d0c8; border-bottom: 1px solid #000; }
-.email-table tr:hover { background: #000080; color: white; cursor: pointer; }
+.toolbar button { margin-right: 5px; padding: 2px 5px; }
+.sidebar-tree { width: 120px; padding: 5px; background: white; }
+.sidebar-tree ul { list-style: none; padding: 0; margin: 0; }
+.sidebar-tree li { padding: 2px; cursor: pointer; }
+.sidebar-tree li:hover { background: var(--win-blue); color: white; }
+.email-list table { width: 100%; border-collapse: collapse; }
+.email-list th { text-align: left; background: var(--win-gray); border-bottom: 1px solid black; padding: 2px; }
+.email-list tr:hover { background: var(--win-blue); color: white; cursor: pointer; }
+.email-preview { height: 150px; margin-top: 5px; overflow-y: auto; }
 
-/* Soul Record App */
-.paper-record { padding: 15px; height: 100%; font-family: 'Courier New', Courier, monospace; }
-.handwritten { color: #0000aa; font-weight: bold; font-family: 'Courier New'; }
+/* === APP: COMPUTER === */
+.file-grid { display: flex; gap: 15px; padding: 10px; }
+.file-item { text-align: center; cursor: pointer; width: 60px; }
+.file-item:active span { background: var(--win-blue); color: white; }
+.sidebar-gray { width: 120px; background: var(--win-gray); padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; }
 
-/* Bible App */
-.display-flex { display: flex; gap: 5px; height: 100%; }
-.sidebar { width: 30%; height: 100%; background: white; }
-.sidebar ul { list-style: none; padding: 0; margin: 0; }
-.sidebar li { padding: 2px 5px; cursor: pointer; }
-.sidebar li:hover { background: #000080; color: white; }
-.content-pane { width: 70%; height: 100%; padding: 10px; background: white; overflow-y: auto; }
+/* === APP: GALLERY === */
+.gallery-toolbar { display: flex; justify-content: space-between; margin-bottom: 5px; }
+#gallery-display img { max-width: 100%; max-height: 100%; }
 
-/* Widget */
-#status-widget {
-    position: absolute; top: 20px; right: 20px;
-    width: 150px; padding: 10px;
+/* === START MENU === */
+#start-menu {
+    position: fixed; bottom: 28px; left: 2px; width: 180px;
+    display: flex; z-index: 10000;
 }
-.progress-bar { width: 100%; height: 10px; background: white; border: 1px inset white; }
-#doom-bar { height: 100%; background: #000080; }
-
-/* --- END OF DAY SCREEN --- */
-#eod-screen {
-    position: fixed; top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: #000; color: #00ff00;
-    font-family: 'Courier New';
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    z-index: 9999;
+.start-sidebar {
+    width: 25px; background: var(--win-blue); color: white;
+    display: flex; align-items: flex-end; padding-bottom: 5px;
 }
-.hidden { display: none !important; }
+.vertical-text { transform: rotate(-90deg); white-space: nowrap; margin-bottom: 20px; font-size: 16px; }
+.start-items { flex-grow: 1; padding: 2px; }
+.start-item { padding: 5px 10px; cursor: pointer; }
+.start-item:hover { background: var(--win-blue); color: white; }
 
-/* --- TASKBAR --- */
+/* === TASKBAR === */
 #taskbar {
-    position: fixed; bottom: 0; left: 0;
-    width: 100%; height: 28px;
-    z-index: 10000; display: flex; align-items: center; padding: 2px;
+    position: fixed; bottom: 0; left: 0; width: 100%; height: 28px;
+    display: flex; align-items: center; padding: 2px; z-index: 9999;
 }
-.start-btn { font-weight: bold; padding: 2px 6px; margin-right: 5px; border: 2px outset #fff; cursor: pointer; }
+.start-btn { 
+    font-weight: bold; padding: 2px 5px; display: flex; align-items: center; gap: 4px; 
+    border: 2px outset white; cursor: pointer;
+}
 .start-btn:active { border-style: inset; }
-.taskbar-right { margin-left: auto; border: 1px inset #fff; padding: 2px 10px; background: #c0c0c0; margin-right: 5px;}
+.taskbar-tray { 
+    margin-left: auto; border: 1px inset white; background: var(--win-gray); 
+    padding: 2px 10px; margin-right: 5px; 
+}
+
+/* === BSOD === */
+#bsod {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #0000aa; color: white;
+    font-family: 'Courier New'; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    z-index: 99999;
+}
